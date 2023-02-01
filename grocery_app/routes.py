@@ -1,3 +1,4 @@
+import os
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
 from grocery_app.models import GroceryStore, GroceryItem
@@ -15,22 +16,28 @@ main = Blueprint("main", __name__)
 @main.route('/')
 def homepage():
     all_stores = GroceryStore.query.all()
-    print(all_stores)
+    for store in all_stores:
+        print(store.title)
     return render_template('home.html', all_stores=all_stores)
 
 @main.route('/new_store', methods=['GET', 'POST'])
 def new_store():
     # TODO: Create a GroceryStoreForm
     form = GroceryStoreForm()
+    print(form.validate_on_submit())
+    print(form.title.data)
+    print(form.address.data)
     # TODO: If form was submitted and was valid:
     # - create a new GroceryStore object and save it to the database,
     # - flash a success message, and
     # - redirect the user to the store detail page.
-    if form.validate_on_submit():
+    if form.is_submitted():
         new_grocery_store = GroceryStore(
             title=form.title.data,
             address=form.address.data,
         )
+        print("yay")
+        print(new_grocery_store.title)
         db.session.add(new_grocery_store)
         db.session.commit()
 
@@ -47,7 +54,7 @@ def new_item():
     # - create a new GroceryItem object and save it to the database,
     # - flash a success message, and
     # - redirect the user to the item detail page.
-    if form.validate_on_submit():
+    if form.is_submitted():
         new_grocery_item = GroceryItem(
             name=form.name.data,
             price=form.price.data,

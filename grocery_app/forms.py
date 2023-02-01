@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateField, SelectField, SubmitField, FloatField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.validators import DataRequired, Length, URL
+from wtforms.validators import DataRequired, Length, URL, ValidationError
 from grocery_app.models import ItemCategory, GroceryStore, GroceryItem
 
 class GroceryStoreForm(FlaskForm):
@@ -11,15 +11,8 @@ class GroceryStoreForm(FlaskForm):
     # - title - StringField
     # - address - StringField
     # - submit button
-    title = StringField('Store Name', 
-        validators=[
-            DataRequired(), 
-            Length(min=3, max=80, message="Your store name needs to be betweeen 3 and 80 chars")
-        ])
-    address = StringField('Date Published', validators=[
-            DataRequired(), 
-            Length(min=3, max=200, message="Your address needs to be betweeen 3 and 200 chars")
-        ])
+    title = StringField('Store Name')
+    address = StringField('Date Published')
     submit = SubmitField('Submit')
 
 class GroceryItemForm(FlaskForm):
@@ -43,4 +36,4 @@ class GroceryItemForm(FlaskForm):
     photo_url = StringField('Photo URL', validators=[DataRequired()])
     store = QuerySelectField('Store', query_factory=lambda: GroceryStore.query, validators=[DataRequired()])
     submit = SubmitField('Submit')
-    pass
+    
