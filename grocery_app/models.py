@@ -1,5 +1,4 @@
 from sqlalchemy_utils import URLType
-
 from grocery_app.extensions import db
 from grocery_app.utils import FormEnum
 
@@ -21,6 +20,12 @@ class GroceryStore(db.Model):
     # created_by_id = db.Column(db.Integer, db.ForeignKey('user_id'))
     # created_by = db.relationship('User')
 
+    def __str__(self):
+        return f'{self.title}'
+
+    def __repr__(self):
+        return f'{self.title}'
+
 class GroceryItem(db.Model):
     """Grocery Item model."""
     id = db.Column(db.Integer, primary_key=True)
@@ -32,6 +37,12 @@ class GroceryItem(db.Model):
     store = db.relationship('GroceryStore', back_populates='items')
     # created_by_id = db.Column(db.Integer, db.ForeignKey('user_id'))
     # created_by = db.relationship('User')
+
+    def __str__(self):
+        return f'{self.title}'
+
+    def __repr__(self):
+        return f'{self.name}'
 
 # class User(db.Model):
 #     """User model"""

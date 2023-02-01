@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SelectField, SubmitField, FloatField
+from wtforms import StringField, SelectField, SubmitField, FloatField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.validators import DataRequired, Length, URL, ValidationError
 from grocery_app.models import ItemCategory, GroceryStore, GroceryItem
+from wtforms.fields.html5 import DateField
 
 class GroceryStoreForm(FlaskForm):
     """Form for adding/updating a GroceryStore."""
@@ -12,7 +13,7 @@ class GroceryStoreForm(FlaskForm):
     # - address - StringField
     # - submit button
     title = StringField('Store Name')
-    address = StringField('Date Published')
+    address = StringField('Address')
     submit = SubmitField('Submit')
 
 class GroceryItemForm(FlaskForm):
