@@ -11,9 +11,49 @@
 
         <!-- TODO: Remove the next paragraph and use the `form` object passed in 
             from the route to render a form. -->
-        <p><em>Form fields go here!</em></p>
-
-        <input type="submit" value="Submit">
+            {{ form.name.label }}
+            {{ form.name }}
+            <!-- Show form errors -->
+            <ul>
+            {% for error in form.name.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.price.label }}
+            {{ form.price(placeholder="0.00") }}
+            <!-- Show form errors -->
+            <ul>
+            {% for error in form.price.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.category.label }}
+            {{ form.category }}
+            <ul>
+            {% for error in form.category.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.photo_url.label }}
+            {{ form.photo_url }}
+            <ul>
+                {% for error in form.category.errors %}
+                    <li class="error">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            
+            {{ form.store.label }}
+            {{ form.store }}
+            <ul>
+                {% for error in form.store.errors %}
+                    <li class="error">{{ error }}</li>
+                {% endfor %}
+            </ul>
+                
+            {{ form.submit }}
     </fieldset>
 </form>
 
