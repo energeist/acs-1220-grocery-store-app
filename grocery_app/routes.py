@@ -80,14 +80,6 @@ def store_detail(store_id):
         flash('Store was edited successfully.')
         return redirect(url_for('main.store_detail', store_id=store.id))
 
-def author_detail(author_id):
-    author = Author.query.get(author_id)
-    form = AuthorForm(obj=author)
-
-    if form.validate_on_submit():
-        author.name = form.name.data
-        author.biography = form.biography.data
-        db.session.commit()
     # TODO: Send the form to the template and use it to render the form fields
     store = GroceryStore.query.get(store_id) # second query is to return the most recent (edited) data to the item details page
     return render_template('store_detail.html', form=form, store=store)
@@ -96,12 +88,13 @@ def author_detail(author_id):
 def item_detail(item_id):
     item = GroceryItem.query.get(item_id)
     # TODO: Create a GroceryItemForm and pass in `obj=item`
-
+    form = GroceryItemForm(obj=item)
     # TODO: If form was submitted and was valid:
     # - update the GroceryItem object and save it to the database,
     # - flash a success message, and
     # - redirect the user to the item detail page.
     if form.validate_on_submit():
+        print("item valid")
         item.name = form.name.data
         item.price = form.price.data
         item.category = form.category.data
