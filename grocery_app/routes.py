@@ -1,4 +1,5 @@
 import os
+from os.path import exists
 from flask import Blueprint, request, render_template, redirect, url_for, flash
 from datetime import date, datetime
 from grocery_app.models import GroceryStore, GroceryItem
@@ -49,11 +50,17 @@ def new_item():
     # - flash a success message, and
     # - redirect the user to the item detail page.
     if form.validate_on_submit():
+        image_exists = os.path.exists(f'../static/{form.photo_url.data}')
+        print(f"image exists: {image_exists}")
+        if image_exists:
+            image_url = form.photo_url.data
+        else:
+            image_url = '/static/img/no_image.jpeg'
         new_grocery_item = GroceryItem(
             name=form.name.data,
             price=form.price.data,
             category=form.category.data,
-            photo_url=form.photo_url.data,
+            photo_url=image_url,
             store=form.store.data
         )
         db.session.add(new_grocery_item)
@@ -73,7 +80,6 @@ def store_detail(store_id):
     # - flash a success message, and
     # - redirect the user to the store detail page.
     if form.validate_on_submit():
-        print("valid")
         store.title = form.title.data
         store.address = form.address.data
         db.session.commit()
@@ -94,11 +100,18 @@ def item_detail(item_id):
     # - flash a success message, and
     # - redirect the user to the item detail page.
     if form.validate_on_submit():
-        print("item valid")
+        image_exists = os.path.exists(f'/static/{form.photo_url.data}')
+        print(f"image exists: {image_exists}")
+        if image_exists:
+            print("doing the thing")
+            image_url = form.photo_url.data
+        else:
+            print("not doing the thing")
+            image_url = '/static/img/no_image.jpeg'
         item.name = form.name.data
         item.price = form.price.data
         item.category = form.category.data
-        item.photo_url = form.photo_url.data
+        item.photo_url = image_url
         item.store = form.store.data
         db.session.commit()
         flash('Item was edited successfully.')
