@@ -1,6 +1,9 @@
 from sqlalchemy_utils import URLType
 from grocery_app.extensions import db
 from grocery_app.utils import FormEnum
+from sqlalchemy.orm import backref
+from flask_login import UserMixin
+import enum
 
 class ItemCategory(FormEnum):
     """Categories of grocery items."""
@@ -44,8 +47,10 @@ class GroceryItem(db.Model):
     def __repr__(self):
         return f'{self.name}'
 
-# class User(db.Model):
-#     """User model"""
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(80), nullable=False)
-#     password = db.Column(db.String(80), nullable=False)
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        return f'<User: {self.username}>'

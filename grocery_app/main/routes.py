@@ -1,12 +1,13 @@
 import os
 from os.path import exists
 from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime
 from grocery_app.models import GroceryStore, GroceryItem
-from grocery_app.forms import GroceryStoreForm, GroceryItemForm
+from grocery_app.main.forms import GroceryStoreForm, GroceryItemForm
 
 # Import app and db from events_app package so that we can run app
-from grocery_app.extensions import app, db
+from grocery_app.extensions import app, db, bcrypt
 
 main = Blueprint("main", __name__)
 
@@ -22,6 +23,7 @@ def homepage():
     return render_template('home.html', all_stores=all_stores)
 
 @main.route('/new_store', methods=['GET', 'POST'])
+@login_required
 def new_store():
     # TODO: Create a GroceryStoreForm
     form = GroceryStoreForm()
@@ -42,6 +44,7 @@ def new_store():
     return render_template('new_store.html', form=form)
 
 @main.route('/new_item', methods=['GET', 'POST'])
+@login_required
 def new_item():
     # TODO: Create a GroceryItemForm
     form = GroceryItemForm()
@@ -119,4 +122,3 @@ def item_detail(item_id):
     # TODO: Send the form to the template and use it to render the form fields
     item = GroceryItem.query.get(item_id)
     return render_template('item_detail.html', form=form, item=item)
-
