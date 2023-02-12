@@ -35,6 +35,7 @@ def new_store():
         new_grocery_store = GroceryStore(
             title=form.title.data,
             address=form.address.data,
+            created_by=current_user
         )
         db.session.add(new_grocery_store)
         db.session.commit()
@@ -53,8 +54,9 @@ def new_item():
     # - flash a success message, and
     # - redirect the user to the item detail page.
     if form.validate_on_submit():
-        image_exists = os.path.exists(f'../static/{form.photo_url.data}')
+        image_exists = os.path.exists(f'../static/img/{form.photo_url.data}')
         print(f"image exists: {image_exists}")
+        print(current_user)
         if image_exists:
             image_url = form.photo_url.data
         else:
@@ -64,7 +66,8 @@ def new_item():
             price=form.price.data,
             category=form.category.data,
             photo_url=image_url,
-            store=form.store.data
+            store=form.store.data,
+            created_by=current_user
         )
         db.session.add(new_grocery_item)
         db.session.commit()
@@ -74,6 +77,7 @@ def new_item():
     return render_template('new_item.html', form=form)
 
 @main.route('/store/<store_id>', methods=['GET', 'POST'])
+@login_required
 def store_detail(store_id):
     store = GroceryStore.query.get(store_id) # first query is to get the store data for modification
     # TODO: Create a GroceryStoreForm and pass in `obj=store`
@@ -85,6 +89,7 @@ def store_detail(store_id):
     if form.validate_on_submit():
         store.title = form.title.data
         store.address = form.address.data
+        last_edit_id = current_user
         db.session.commit()
         flash('Store was edited successfully.')
         return redirect(url_for('main.store_detail', store_id=store.id))
@@ -94,6 +99,7 @@ def store_detail(store_id):
     return render_template('store_detail.html', form=form, store=store)
 
 @main.route('/item/<item_id>', methods=['GET', 'POST'])
+@login_required
 def item_detail(item_id):
     item = GroceryItem.query.get(item_id)
     # TODO: Create a GroceryItemForm and pass in `obj=item`
@@ -103,19 +109,18 @@ def item_detail(item_id):
     # - flash a success message, and
     # - redirect the user to the item detail page.
     if form.validate_on_submit():
-        image_exists = os.path.exists(f'/static/{form.photo_url.data}')
+        image_exists = os.path.exists(f'/static/img/{form.photo_url.data}')
         print(f"image exists: {image_exists}")
         if image_exists:
-            print("doing the thing")
             image_url = form.photo_url.data
         else:
-            print("not doing the thing")
             image_url = '/static/img/no_image.jpeg'
         item.name = form.name.data
         item.price = form.price.data
         item.category = form.category.data
         item.photo_url = image_url
         item.store = form.store.data
+        last_edit_id = current_user
         db.session.commit()
         flash('Item was edited successfully.')
         return redirect(url_for('main.item_detail', item_id=item.id))

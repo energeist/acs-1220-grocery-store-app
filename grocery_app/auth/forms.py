@@ -6,6 +6,7 @@ from grocery_app.models import ItemCategory, GroceryStore, GroceryItem, User
 from grocery_app.extensions import app, db, bcrypt
 from wtforms.fields.html5 import DateField
 
+
 class SignUpForm(FlaskForm):
     username = StringField('User Name',
         validators=[DataRequired(), Length(min=3, max=50)])

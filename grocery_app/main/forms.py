@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, URL, ValidationError
 from grocery_app.models import ItemCategory, GroceryStore, GroceryItem, User
 from grocery_app.extensions import app, db, bcrypt
 from wtforms.fields.html5 import DateField
+# from flask_login import current_user
 
 class GroceryStoreForm(FlaskForm):
     """Form for adding/updating a GroceryStore."""
@@ -16,6 +17,7 @@ class GroceryStoreForm(FlaskForm):
     title = StringField('Store Name')
     address = StringField('Address')
     submit = SubmitField('Submit')
+    # created_by_id = flask_login.current_user
 
 class GroceryItemForm(FlaskForm):
     """Form for adding/updating a GroceryItem."""
@@ -37,4 +39,5 @@ class GroceryItemForm(FlaskForm):
     category = SelectField('Category', choices=ItemCategory.choices(), validators=[DataRequired()])
     photo_url = StringField('Photo URL', validators=[DataRequired()])
     store = QuerySelectField('Store', query_factory=lambda: GroceryStore.query, validators=[DataRequired()])
+    # created_by_id = flask_login.current_user
     submit = SubmitField('Submit')
