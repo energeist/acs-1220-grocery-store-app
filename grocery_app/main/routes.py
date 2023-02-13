@@ -4,7 +4,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from datetime import date, datetime
 from grocery_app.models import GroceryStore, GroceryItem
-from grocery_app.main.forms import GroceryStoreForm, GroceryItemForm
+from grocery_app.main.forms import GroceryStoreForm, GroceryItemForm, CartForm
 
 # Import app and db from events_app package so that we can run app
 from grocery_app.extensions import app, db, bcrypt
@@ -104,6 +104,7 @@ def item_detail(item_id):
     item = GroceryItem.query.get(item_id)
     # TODO: Create a GroceryItemForm and pass in `obj=item`
     form = GroceryItemForm(obj=item)
+    cart_form = CartForm()
     # TODO: If form was submitted and was valid:
     # - update the GroceryItem object and save it to the database,
     # - flash a success message, and
@@ -124,6 +125,22 @@ def item_detail(item_id):
         db.session.commit()
         flash('Item was edited successfully.')
         return redirect(url_for('main.item_detail', item_id=item.id))
+    if cart_form.validate_on_submit():
+        print("cart submit")
+        pass
     # TODO: Send the form to the template and use it to render the form fields
     item = GroceryItem.query.get(item_id)
-    return render_template('item_detail.html', form=form, item=item)
+    return render_template('item_detail.html', form=form, cart_form=cart_form, item=item)
+
+@main.route('/add_to_shopping_list/<item_id>', methods=['POST'])
+@login_required
+def add_to_shopping_list(item_id):
+    # ... adds item to current_user's shopping list
+    pass
+
+@main.route('/shopping_list')
+@login_required
+def shopping_list():
+    # ... get logged in user's shopping list items ...
+    # ... display shopping list items in a template ...
+    pass

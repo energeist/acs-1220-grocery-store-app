@@ -13,7 +13,19 @@
 
 <p><strong>Store:</strong> {{ item.store.title }}</p>
 
-<p><strong>Item created by:</strong> {{ item.store.created_by_id }}</p>
+<p><strong>Item created by user ID:</strong> {{ item.store.created_by_id }}</p>
+
+<form method="POST" action="{{ url_for('main.add_to_shopping_list', item_id=item.id) }}">
+    <!-- add a toggle thingy -->
+    {{ form.csrf_token }}
+    <fieldset>
+        <legend>Add to cart?</legend>
+        {{ cart_form.quantity.label }}
+        {{ cart_form.quantity }}
+
+        {{ form.submit }}
+    </fieldset>
+</form>
 
 <h2>Edit Item</h2>
 
