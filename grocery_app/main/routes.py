@@ -56,7 +56,6 @@ def new_item():
     if form.validate_on_submit():
         image_exists = os.path.exists(f'../static/img/{form.photo_url.data}')
         print(f"image exists: {image_exists}")
-        print(current_user)
         if image_exists:
             image_url = form.photo_url.data
         else:
@@ -135,7 +134,6 @@ def add_to_shopping_list(item_id):
     item = GroceryItem.query.get(item_id)
     current_user.shopping_list_items.append(item)
     db.session.commit()
-    print(f"{item.name} added to cart")
     flash(f"{item.name} added to cart")
     return redirect(url_for("main.shopping_list", item_id=item.id))
 
@@ -143,12 +141,9 @@ def add_to_shopping_list(item_id):
 @login_required
 def remove_from_shopping_list(item_id):
     # ... removes item from current_user's shopping list
-    print(item_id)
-    print(type(item_id))
     item = GroceryItem.query.get(item_id)
     current_user.shopping_list_items.remove(item)
     db.session.commit()
-    print(f"{item.name} removed from cart")
     flash(f"{item.name} removed from cart")
     return redirect(url_for("main.shopping_list", item_id=item.id))
 
