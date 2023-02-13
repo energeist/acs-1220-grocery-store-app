@@ -42,7 +42,7 @@ class GroceryItem(db.Model):
     created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # last_edit_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     created_by = db.relationship('User')
-    user_lists = db.relationship('User', 
+    user_item_lists = db.relationship('User', 
         secondary='user_shopping_list', back_populates='shopping_list_items'
     )
 
@@ -57,7 +57,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(200), nullable=False)
     shopping_list_items = db.relationship('GroceryItem',
-        secondary='user_shopping_list', back_populates='user_lists'
+        secondary='user_shopping_list', back_populates='user_item_lists'
     )
 
     def __repr__(self):
